@@ -25,7 +25,7 @@ export default function CreateGame() {
     const indexWithLastLetter = allWords.indexOf(withLastLetter);
     if (index >= 0) {
       window.location.href = `/custom/${index}`;
-    } else if ((indexWithLastLetter) => 0) {
+    } else if (indexWithLastLetter >= 0) {
       window.location.href = `/custom/${indexWithLastLetter}`;
     } else {
         setInvalidWord(true);
