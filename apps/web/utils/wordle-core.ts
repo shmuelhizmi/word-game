@@ -2,6 +2,7 @@ import { shuffle } from "./shuffle";
 import popularWords from "./words.json";
 import { Word } from "types";
 import { allWords } from "./words";
+import { exportToText } from "./share";
 
 const words = shuffle(popularWords, "wordle-games").filter((word) =>
   allWords.includes(word)
@@ -57,6 +58,9 @@ export function createWordleGame(word?: string) {
     get guesses() {
       return gusses;
     },
+    get resultText() {
+      return exportToText(gusses);
+    },
     get speechSynthesisEnabled() {
       return enableSpeechSynthesis && !speechSynthesisNotSupported();
     },
@@ -110,7 +114,7 @@ export function createWordleGame(word?: string) {
             }
           }
         });
-        if (gusses.length < 6) {
+        if (gusses.length < 6 && !self.isWinning) {
             gusses.push([]);
         }
         return true;
@@ -142,7 +146,7 @@ export function createWordleGame(word?: string) {
       return true;
     },
     get isGameOver() {
-      return !self.isWinning && gusses.length === 6 && gusses[gusses.length - 1].length === wordLength;
+      return (gusses.length === 6 && gusses[gusses.length - 1].length === wordLength) || self.isWinning;
     },
   };
   return self;

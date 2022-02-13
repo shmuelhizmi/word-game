@@ -41,7 +41,7 @@ export const TopBar = ({ newGame, muted, onMuteClick }: TopBarProps) => {
         </button>
       </div>
       <div>
-        <h1>סבא-וורדל</h1>
+        <h1>ווערטער</h1>
       </div>
       <div>
         <button onClick={onMuteClick}>
@@ -61,7 +61,7 @@ export const MiniTopBar = () => {
   return (
     <Container>
       <div>
-        <h1>צור משחק חדש</h1>
+        <h1>בחרו מילה</h1>
       </div>
     </Container>
   );

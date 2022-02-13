@@ -1,4 +1,4 @@
-import { Main, TopBar, Keyboard, Container } from "ui";
+import { Main, TopBar, Keyboard, Container, SharePanel } from "ui";
 import { useEffect, useState } from "react";
 import { createWordleGame } from "./utils/wordle-core";
 
@@ -43,14 +43,18 @@ export function Game(props: GameProps) {
         isGameOver={game.isGameOver}
         isGameWon={game.isWinning && game.isGameOver}
       />
-      <Keyboard
-        currectLetters={game.currectLetters}
-        partialLetters={game.partialLetters}
-        wrongLetters={game.wrongLetters}
-        onBackspaceClick={onLetterDelete}
-        onLetterClick={onLetterClick}
-        onSendClick={onWordSubmit}
-      />
+      {game.isGameOver ? (
+        <SharePanel shareData={game.resultText} won={game.isWinning} />
+      ) : (
+        <Keyboard
+          currectLetters={game.currectLetters}
+          partialLetters={game.partialLetters}
+          wrongLetters={game.wrongLetters}
+          onBackspaceClick={onLetterDelete}
+          onLetterClick={onLetterClick}
+          onSendClick={onWordSubmit}
+        />
+      )}
     </Container>
   );
 }

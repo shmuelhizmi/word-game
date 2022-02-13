@@ -4,3 +4,4 @@ export * from "./Main";
 export * from "./TopBar";
 export * from "./Keyboard";
 export * from "./Container";
+export * from "./SharePanel";
