@@ -62,7 +62,7 @@ const PartialWinningTile = styled(Tile)`
 `;
 
 const UndeterminedTile = styled(Tile)`
-  border: solid rgb(34, 34, 34);
+  border-color: rgb(34, 34, 34);
   @media (prefers-color-scheme: dark) {
     border-color: white;
   }
