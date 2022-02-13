@@ -15,5 +15,6 @@ export function exportToText(words: Word[]) {
     .map((word) => word.map(({ isWinning }) => winningMap[isWinning]).join(""))
     .join("\n");
 
-  return `${header}\n${subHeader}\n\n${body}`;
+  const footer = `שחק עכשיו ${location.toString()}`;
+  return `${header}\n${subHeader}\n\n${body}\n\n${footer}`;
 }
