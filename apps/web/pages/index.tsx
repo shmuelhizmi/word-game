@@ -1,10 +1,8 @@
-import { Button } from "ui";
+import { Game } from "../game";
 
-export default function Web() {
+
+export default function Index() {
   return (
-    <div>
-      <h1>Web</h1>
-      <Button />
-    </div>
-  );
+    <Game />
+  )
 }
