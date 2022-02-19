@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { GoLink } from "react-icons/go";
 
 const KeyboardContainer = styled.div`
   display: flex;
@@ -70,6 +71,8 @@ interface KeyboardProps {
   currectLetters: string;
   partialLetters: string;
   wrongLetters: string;
+  onShareClick: () => void;
+  disableShare?: boolean;
 }
 
 interface LetterRendererProps {
@@ -108,12 +111,22 @@ export function Keyboard(props: KeyboardProps) {
         <div key={i}>
           {i === 0 && <Clear onClick={props.onBackspaceClick}>{"<"}</Clear>}
           {row.map((letter, j) => (
-            <LetterRenderer key={j} onClick={() => props.onLetterClick(letter)} {...props} letter={letter} />
+            <LetterRenderer
+              key={j}
+              onClick={() => props.onLetterClick(letter)}
+              {...props}
+              letter={letter}
+            />
           ))}
         </div>
       ))}
       <div>
         <Send onClick={props.onSendClick}>שלח</Send>
+        {!props.disableShare && (
+          <WinningLetter onClick={props.onShareClick}>
+            <GoLink />
+          </WinningLetter>
+        )}
       </div>
     </KeyboardContainer>
   );

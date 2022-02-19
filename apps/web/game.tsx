@@ -30,6 +30,18 @@ export function Game(props: GameProps) {
     game.speechSynthesisEnabled = !game.speechSynthesisEnabled;
     setWords([...game.guesses]);
   }
+  function onShareClick() {
+    if (window.navigator?.share) {
+      window.navigator.share({
+        title: "ווערטער",
+        url: window.location.toString(),
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.toString()).then(() => {
+        alert("לינק לשיתוף הועתק");
+      });
+    }
+  }
   return (
     <Container>
       <TopBar
@@ -50,6 +62,7 @@ export function Game(props: GameProps) {
           currectLetters={game.currectLetters}
           partialLetters={game.partialLetters}
           wrongLetters={game.wrongLetters}
+          onShareClick={onShareClick}
           onBackspaceClick={onLetterDelete}
           onLetterClick={onLetterClick}
           onSendClick={onWordSubmit}

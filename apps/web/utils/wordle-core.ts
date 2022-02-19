@@ -15,28 +15,25 @@ const day =
   1;
 
 export function addHebrewLastLetter(word) {
-    const map = {
-        "נ": "ן",
-        "פ": "ף",
-        "צ": "ץ",
-        "כ": "ך",
-    };
-    const lastLetter = word[word.length - 1];
-    if (map[lastLetter]) {
-        return word.slice(0, -1) + map[lastLetter];
-    }
-    return word;
+  const map = {
+    נ: "ן",
+    פ: "ף",
+    צ: "ץ",
+    כ: "ך",
+  };
+  const lastLetter = word[word.length - 1];
+  if (map[lastLetter]) {
+    return word.slice(0, -1) + map[lastLetter];
+  }
+  return word;
 }
 
-const speechSynthesisNotSupported = () => (
+const speechSynthesisNotSupported = () =>
   typeof window.speechSynthesis === "undefined" ||
-    typeof window.speechSynthesis.speak === "undefined"
-);
+  typeof window.speechSynthesis.speak === "undefined";
 
 export function textToSpeach(text: string) {
-  if (
-    speechSynthesisNotSupported()
-  ) {
+  if (speechSynthesisNotSupported()) {
     return;
   }
   const utterance = new SpeechSynthesisUtterance(text);
@@ -48,7 +45,19 @@ export function createWordleGame(word?: string) {
   // select word for every day
   const currentWord = word || words[Math.floor(day % words.length)];
   const wordLength = currentWord.length;
-  const gusses: Word[] = [[]];
+  const localStorageKey = `guesses_${Buffer.from(
+    currentWord,
+  ).toString("base64")}`;
+  const read = () =>
+    JSON.parse(
+      globalThis.localStorage?.getItem(localStorageKey) || "null"
+    ) || [[]];
+  const write = (guesses) =>
+    globalThis.localStorage?.setItem(
+      localStorageKey,
+      JSON.stringify(guesses)
+    );
+  const gusses: Word[] = read();
   let currectLetters = "";
   let partialLetters = "";
   let wrongLetters = "";
@@ -68,13 +77,13 @@ export function createWordleGame(word?: string) {
       enableSpeechSynthesis = value;
     },
     get currectLetters() {
-        return currectLetters;
+      return currectLetters;
     },
     get partialLetters() {
-        return partialLetters;
+      return partialLetters;
     },
     get wrongLetters() {
-        return wrongLetters;
+      return wrongLetters;
     },
     word: currentWord,
     guess(letter: string) {
@@ -84,18 +93,24 @@ export function createWordleGame(word?: string) {
       }
       return self;
     },
-    sendGuess() {
+    validateGuess() {
       const lastGuess = gusses[gusses.length - 1];
       if (lastGuess.length === wordLength) {
         const word = lastGuess.map((letter) => letter.letter).join("");
         const wordWithHebrewLastLetter = addHebrewLastLetter(word);
-        if (!allWords.includes(word) && !allWords.includes(wordWithHebrewLastLetter)) {
+        if (
+          !allWords.includes(word) &&
+          !allWords.includes(wordWithHebrewLastLetter)
+        ) {
           return false;
         }
         if (enableSpeechSynthesis) textToSpeach(word);
         let wordWithoutCurrentGuess = currentWord;
         lastGuess.forEach((letter, index) => {
-          if (letter.letter === currentWord[index] || wordWithHebrewLastLetter[index] === currentWord[index]) {
+          if (
+            letter.letter === currentWord[index] ||
+            wordWithHebrewLastLetter[index] === currentWord[index]
+          ) {
             letter.isWinning = "winning";
             currectLetters += letter.letter;
             wordWithoutCurrentGuess =
@@ -105,7 +120,10 @@ export function createWordleGame(word?: string) {
         });
         lastGuess.forEach((letter, index) => {
           if (letter.isWinning === "undetermined") {
-            if (wordWithoutCurrentGuess.includes(letter.letter) || wordWithoutCurrentGuess.includes(wordWithHebrewLastLetter[index])) {
+            if (
+              wordWithoutCurrentGuess.includes(letter.letter) ||
+              wordWithoutCurrentGuess.includes(wordWithHebrewLastLetter[index])
+            ) {
               letter.isWinning = "partialWinning";
               partialLetters += letter.letter;
             } else {
@@ -115,9 +133,19 @@ export function createWordleGame(word?: string) {
           }
         });
         if (gusses.length < 6 && !self.isWinning) {
-            gusses.push([]);
+          gusses.push([]);
         }
+        write(gusses);
         return true;
+      }
+      return false;
+    },
+    sendGuess() {
+      if (self.validateGuess()) {
+        return true;
+      }
+      if (navigator.vibrate) {
+        navigator.vibrate(200);
       }
       return false;
     },
@@ -146,7 +174,14 @@ export function createWordleGame(word?: string) {
       return true;
     },
     get isGameOver() {
-      return (gusses.length === 6 && gusses[gusses.length - 1].length === wordLength) || self.isWinning;
+      return (
+        (gusses.length === 6 &&
+          gusses[gusses.length - 1].length === wordLength &&
+          !gusses[gusses.length - 1].find(
+            (letter) => letter.isWinning === "undetermined"
+          )) ||
+        self.isWinning
+      );
     },
   };
   return self;

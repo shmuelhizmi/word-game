@@ -54,6 +54,8 @@ export default function CreateGame() {
         onBackspaceClick={DeleteLetter}
         onLetterClick={AddLetter}
         onSendClick={onSubmit}
+        onShareClick={() => {}}
+        disableShare
         partialLetters=""
         wrongLetters=""
       />

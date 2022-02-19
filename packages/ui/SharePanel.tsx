@@ -36,9 +36,15 @@ const LoseShareButton = styled(ShareButton)`
 export function SharePanel(props: SharePanelProps) {
   const Button = props.won ? WinShareButton : LoseShareButton;
   function Share() {
-    window.navigator.share({
-      text: props.shareData,
-    });
+    if (window.navigator.share) {
+      window.navigator.share({
+        text: props.shareData,
+      });
+    } else {
+      navigator.clipboard.writeText(props.shareData).then(() => {
+        alert("Copied to clipboard");
+      });
+    }
   }
   return (
     <Container>
