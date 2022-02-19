@@ -29,6 +29,9 @@ export default function CreateGame() {
       window.location.href = `/custom/${indexWithLastLetter}`;
     } else {
         setInvalidWord(true);
+        if (navigator.vibrate) {
+          navigator.vibrate(200);
+        }
     }
   }
 
