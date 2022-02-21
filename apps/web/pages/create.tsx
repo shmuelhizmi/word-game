@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useState } from "react";
 import { Letter } from "types";
 import { Container, Keyboard, Main, MiniTopBar } from "ui";
@@ -37,6 +38,9 @@ export default function CreateGame() {
 
   return (
     <Container>
+      <Head>
+        <title>ווערטער</title>
+      </Head>
       <MiniTopBar />
       <Main
         numberOfRows={1}
@@ -53,7 +57,7 @@ export default function CreateGame() {
         ]}
       />
       <Keyboard
-        currectLetters={invalidWord ? newWord : ""}
+        currectLetters=""
         onBackspaceClick={DeleteLetter}
         onLetterClick={AddLetter}
         onSendClick={onSubmit}

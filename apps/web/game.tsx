@@ -1,34 +1,39 @@
 import { Main, TopBar, Keyboard, Container, SharePanel } from "ui";
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
 import { createWordleGame } from "./utils/wordle-core";
+import { useRouter } from "next/router";
 
 interface GameProps {
   word?: string;
 }
-export function Game(props: GameProps) {
-  const [game, setGame] = useState(() => createWordleGame(props.word));
-  const [words, setWords] = useState(game.guesses);
 
-  useEffect(() => {
-    setGame(createWordleGame(props.word));
-    setWords(game.guesses);
-  }, [props.word]);
+const isSsr = typeof window === "undefined";
+
+export const useUpdate = () => {
+  const update = useState(0)[1];
+  return () => update(update => update + 1);
+};
+
+export function Game(props: GameProps) {
+  const game = useMemo(() => createWordleGame(props.word), [props.word]);
+  const update = useUpdate();
+  const router = useRouter();
 
   function onLetterClick(letter: string) {
-    const newWords = game.guess(letter);
-    setWords([...newWords.guesses]);
+    game.guess(letter);
+    update();
   }
   function onLetterDelete() {
-    const newWords = game.deleteLastLetter();
-    setWords([...newWords.guesses]);
+    game.deleteLastLetter();
+    update();
   }
   function onWordSubmit() {
-    const success = game.sendGuess();
-    setWords([...game.guesses]);
+    game.sendGuess();
+    update();
   }
   function onMuteClick() {
     game.speechSynthesisEnabled = !game.speechSynthesisEnabled;
-    setWords([...game.guesses]);
+    update();
   }
   function onShareClick() {
     if (window.navigator?.share) {
@@ -42,16 +47,24 @@ export function Game(props: GameProps) {
       });
     }
   }
+
+  if (isSsr) {
+    return null;
+  }
+
+  const cheatsOn = router.query.cheats === "on";
+
   return (
     <Container>
       <TopBar
         newGame={() => (window.location.href = "/create")}
         onMuteClick={onMuteClick}
+        overrideHeader={cheatsOn ? game.word : undefined}
         muted={!game.speechSynthesisEnabled}
       />
       <Main
         numberOfRows={6}
-        words={words}
+        words={game.guesses}
         isGameOver={game.isGameOver}
         isGameWon={game.isWinning && game.isGameOver}
       />

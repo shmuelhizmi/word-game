@@ -57,18 +57,32 @@ export function createWordleGame(word?: string) {
       localStorageKey,
       JSON.stringify(guesses)
     );
-  const gusses: Word[] = read();
+  const guesses: Word[] = read();
   let currectLetters = "";
   let partialLetters = "";
   let wrongLetters = "";
   let enableSpeechSynthesis = false;
 
+  for (const guess of guesses) {
+    for (const letter of guess) {
+      switch (letter.isWinning) {
+        case "winning":
+          currectLetters += letter.letter;
+          break;
+        case "partialWinning":
+          partialLetters += letter.letter;
+          break;
+        case "losing":
+          wrongLetters += letter.letter;
+          break;
+      }
+    }
+  }
+
   const self = {
-    get guesses() {
-      return gusses;
-    },
+    guesses,
     get resultText() {
-      return exportToText(gusses);
+      return exportToText(guesses);
     },
     get speechSynthesisEnabled() {
       return enableSpeechSynthesis && !speechSynthesisNotSupported();
@@ -76,25 +90,19 @@ export function createWordleGame(word?: string) {
     set speechSynthesisEnabled(value) {
       enableSpeechSynthesis = value;
     },
-    get currectLetters() {
-      return currectLetters;
-    },
-    get partialLetters() {
-      return partialLetters;
-    },
-    get wrongLetters() {
-      return wrongLetters;
-    },
+    currectLetters,
+    partialLetters,
+    wrongLetters,
     word: currentWord,
     guess(letter: string) {
-      const lastGuess = gusses[gusses.length - 1];
+      const lastGuess = guesses[guesses.length - 1];
       if (lastGuess.length < wordLength) {
         lastGuess.push({ letter, isWinning: "undetermined" });
       }
       return self;
     },
     validateGuess() {
-      const lastGuess = gusses[gusses.length - 1];
+      const lastGuess = guesses[guesses.length - 1];
       if (lastGuess.length === wordLength) {
         const word = lastGuess.map((letter) => letter.letter).join("");
         const wordWithHebrewLastLetter = addHebrewLastLetter(word);
@@ -132,10 +140,10 @@ export function createWordleGame(word?: string) {
             }
           }
         });
-        if (gusses.length < 6 && !self.isWinning) {
-          gusses.push([]);
+        if (guesses.length < 6 && !self.isWinning) {
+          guesses.push([]);
         }
-        write(gusses);
+        write(guesses);
         return true;
       }
       return false;
@@ -150,19 +158,19 @@ export function createWordleGame(word?: string) {
       return false;
     },
     deleteLastGuess() {
-      const lastGuess = gusses[gusses.length - 1];
+      const lastGuess = guesses[guesses.length - 1];
       lastGuess.slice(0, -1);
       return self;
     },
     deleteLastLetter() {
-      const lastGuess = gusses[gusses.length - 1];
+      const lastGuess = guesses[guesses.length - 1];
       if (lastGuess.length > 0) {
         lastGuess.pop();
       }
       return self;
     },
     get isWinning() {
-      const lastGuess = gusses[gusses.length - 1];
+      const lastGuess = guesses[guesses.length - 1];
       if (lastGuess.length !== wordLength) {
         return false;
       }
@@ -175,9 +183,9 @@ export function createWordleGame(word?: string) {
     },
     get isGameOver() {
       return (
-        (gusses.length === 6 &&
-          gusses[gusses.length - 1].length === wordLength &&
-          !gusses[gusses.length - 1].find(
+        (guesses.length === 6 &&
+          guesses[guesses.length - 1].length === wordLength &&
+          !guesses[guesses.length - 1].find(
             (letter) => letter.isWinning === "undetermined"
           )) ||
         self.isWinning
@@ -186,3 +194,5 @@ export function createWordleGame(word?: string) {
   };
   return self;
 }
+
+export type WordCore = ReturnType<typeof createWordleGame>;

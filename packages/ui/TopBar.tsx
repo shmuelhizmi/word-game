@@ -32,7 +32,7 @@ const Container = styled.div`
   }
 `;
 
-export const TopBar = ({ newGame, muted, onMuteClick }: TopBarProps) => {
+export const TopBar = ({ newGame, muted, onMuteClick, overrideHeader }: TopBarProps) => {
   return (
     <Container>
       <div>
@@ -41,7 +41,7 @@ export const TopBar = ({ newGame, muted, onMuteClick }: TopBarProps) => {
         </button>
       </div>
       <div>
-        <h1>ווערטער</h1>
+        <h1>{overrideHeader ?? "ווערטער"}</h1>
       </div>
       <div>
         <button onClick={onMuteClick}>
@@ -71,4 +71,5 @@ interface TopBarProps {
   newGame: () => void;
   muted: boolean;
   onMuteClick: () => void;
+  overrideHeader: string;
 }
