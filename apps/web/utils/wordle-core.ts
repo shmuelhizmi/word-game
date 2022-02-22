@@ -90,9 +90,15 @@ export function createWordleGame(word?: string) {
     set speechSynthesisEnabled(value) {
       enableSpeechSynthesis = value;
     },
-    currectLetters,
-    partialLetters,
-    wrongLetters,
+    get currectLetters() {
+      return currectLetters;
+    },
+    get partialLetters() {
+      return partialLetters;
+    },
+    get wrongLetters() {
+      return wrongLetters;
+    },
     word: currentWord,
     guess(letter: string) {
       const lastGuess = guesses[guesses.length - 1];
