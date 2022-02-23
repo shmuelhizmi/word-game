@@ -100,10 +100,17 @@ export function createWordleGame(word?: string) {
       return wrongLetters;
     },
     word: currentWord,
+    get currentGuess() {
+      const lastGuess = guesses[guesses.length - 1];
+      return lastGuess.map((letter) => letter.letter || "").join("");
+    },
     guess(letter: string) {
       const lastGuess = guesses[guesses.length - 1];
       if (lastGuess.length < wordLength) {
         lastGuess.push({ letter, isWinning: "undetermined" });
+      }
+      if (self.currentGuess === "יולי") {
+        self.guess("❤️")
       }
       return self;
     },
