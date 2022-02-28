@@ -269,10 +269,10 @@ export function createExtreamWordleGame(): WordCore {
           guess.every((letter, index) => {
             const lastLetter = lastLetterMap[letter.letter] as string;
             const letters = lastLetter ? [letter.letter, lastLetter] : [letter.letter];
+            if (letter.isWinning === "winning" && (lastLetter !== possibleWord[index] || letter.letter !== possibleWord[index])) {
+              return false;
+            }
             for (const char of letters) {
-              if (letter.isWinning === "winning" && char !== possibleWord[index]) {
-                return false;
-              }
               if (letter.isWinning === "losing" && possibleWord.includes(char)) {
                 return false;
               }
