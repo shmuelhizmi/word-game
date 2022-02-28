@@ -255,6 +255,9 @@ export function createExtreamWordleGame(): WordCore {
       let bestWordScore = 0;
       for (const possibleWord of allWords) {
         let score = 0;
+        if (!possibleWord) {
+          continue;
+        }
         if (possibleWord.includes('\'')) {
           continue;
         }
