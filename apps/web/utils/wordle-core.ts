@@ -288,6 +288,8 @@ export function createExtreamWordleGame(): WordCore {
         if (possibleWord.length !== new Set(possibleWord).size) {
           score += 10;
         }
+        const randomness = Math.random() * 5;
+        score -= randomness;
         if (score > bestWordScore) {
           bestWord = possibleWord;
           bestWordScore = score;
