@@ -43,6 +43,7 @@ export default function CreateGame() {
       </Head>
       <MiniTopBar />
       <Main
+        word=""
         numberOfRows={1}
         isGameOver={false}
         isGameWon={false}
