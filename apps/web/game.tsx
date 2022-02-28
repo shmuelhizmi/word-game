@@ -67,6 +67,7 @@ export function Game(props: GameProps) {
       <Main
         numberOfRows={6}
         words={game.guesses}
+        word={game.word}
         isGameOver={game.isGameOver}
         isGameWon={game.isWinning && game.isGameOver}
       />

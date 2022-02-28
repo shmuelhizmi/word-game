@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { keyframes, css } from "@emotion/react";
 import _ from "lodash";
-import { Word } from "types";
+import { Letter, Word } from "types";
 import { useEffect, useState } from "react";
 
 const Container = styled.div`
@@ -97,6 +97,7 @@ const UnlossingContainer = styled(LossingContainer)`
 
 interface MainInterfaceProps {
   words: Word[];
+  word: string;
   numberOfRows: number;
   isGameOver: boolean;
   isGameWon: boolean;
@@ -118,15 +119,18 @@ export function fillMissingWords(_words: Word[], numberOfRows: number) {
   return words;
 }
 
-const defaultLossingText = "המילה איננה נכונה המילה איננה נכונה";
+const defaultLossingText = "המילה איננה נכונה המילה איננה";
 
-function lossingWords(lossingText = defaultLossingText): Word[] {
+function lossingWords(word: string, lossingText = defaultLossingText): Word[] {
   return lossingText.split(" ").map((word, i) =>
     word.split("").map((letter) => ({
       isWinning: (i + 1) % 2 === 0 ? "losing" : "partialWinning",
       letter,
-    }))
-  );
+    } as Letter))
+  ).concat([word.split("").map((letter) => ({
+    isWinning: "winning",
+    letter,
+  } as Letter))]);
 }
 
 export function createDeterministicRandom(): () => number {
@@ -173,7 +177,7 @@ export const Main = (props: MainInterfaceProps) => {
   }, [props.isGameOver]);
   return (
     <Wrapper>
-      {(useLossingWords ? lossingWords() : words).map((word, columnIndex) => (
+      {(useLossingWords ? lossingWords(props.word) : words).map((word, columnIndex) => (
         <Row key={columnIndex}>
           {word.map((letter, rowIndex) => {
             let CurrentTile = UndeterminedTile;
