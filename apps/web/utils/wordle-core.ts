@@ -97,7 +97,9 @@ export function createWordleGame(word?: string) {
     get wrongLetters() {
       return wrongLetters;
     },
-    word: currentWord,
+    get word() {
+      return currentWord
+    },
     get currentGuess() {
       const lastGuess = guesses[guesses.length - 1];
       return lastGuess.map((letter) => letter.letter || "").join("");
@@ -238,7 +240,9 @@ export function createExtreamWordleGame(): WordCore {
     get wrongLetters() {
       return wrongLetters;
     },
-    word: currentWord,
+    get word() {
+      return currentWord
+    },
     get currentGuess() {
       const lastGuess = guesses[guesses.length - 1];
       return lastGuess.map((letter) => letter.letter || "").join("");
