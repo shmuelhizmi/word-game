@@ -1,10 +1,11 @@
 import { Main, TopBar, Keyboard, Container, SharePanel } from "ui";
 import { useState, useMemo } from "react";
-import { createWordleGame } from "./utils/wordle-core";
+import { createWordleGame, createExtreamWordleGame } from "./utils/wordle-core";
 import { useRouter } from "next/router";
 
 interface GameProps {
   word?: string;
+  hardMode?: boolean;
 }
 
 const isSsr = typeof window === "undefined";
@@ -15,7 +16,8 @@ export const useUpdate = () => {
 };
 
 export function Game(props: GameProps) {
-  const game = useMemo(() => createWordleGame(props.word), [props.word]);
+  const createGame = props.hardMode ? createExtreamWordleGame : createWordleGame;
+  const game = useMemo(() => createGame(props.word), [props.word]);
   const update = useUpdate();
   const router = useRouter();
 
