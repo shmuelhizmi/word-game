@@ -257,6 +257,7 @@ export function createExtreamWordleGame(): WordCore {
     findHarderWord() {
       let bestWord = "";
       let bestWordScore = 0;
+      const scores = new Map<number, string>();
       for (const possibleWord of allWords) {
         let score = 0;
         if (!possibleWord) {
@@ -268,20 +269,17 @@ export function createExtreamWordleGame(): WordCore {
         const matchAllGuesses = guesses.every((guess) =>
           guess.every((letter, index) => {
             const lastLetter = lastLetterMap[letter.letter] as string;
-            const letters = lastLetter ? [letter.letter, lastLetter] : [letter.letter];
             if (letter.isWinning === "winning" && (lastLetter !== possibleWord[index] || letter.letter !== possibleWord[index])) {
               return false;
             }
-            for (const char of letters) {
-              if (letter.isWinning === "losing" && possibleWord.includes(char)) {
-                return false;
-              }
-              if (letter.isWinning === "undetermined") {
-                if (!possibleWord.includes(char)) {
-                  score+= 10;
-                } else if (possibleWord[index] !== char) {
-                  score+= 5;
-                }
+            if (letter.isWinning === "losing"  && (possibleWord.includes(letter.letter) || possibleWord.includes(lastLetter))) {
+              return false;
+            }
+            if (letter.isWinning === "undetermined") {
+              if (!possibleWord.includes(letter.letter) && !possibleWord.includes(lastLetter)) {
+                score+= 10;
+              } else if (possibleWord[index] !== letter.letter && possibleWord[index] !== lastLetter) {
+                score+= 5;
               }
             }
             return true;
@@ -289,6 +287,7 @@ export function createExtreamWordleGame(): WordCore {
         if (!matchAllGuesses) {
           continue;
         }
+        scores.set(score, possibleWord);
         if (possibleWord.length !== new Set(possibleWord).size) {
           score += 10;
         }
@@ -299,6 +298,7 @@ export function createExtreamWordleGame(): WordCore {
           bestWordScore = score;
         }
       }
+      console.log(scores);
       return bestWord || currentWord;
     },
     validateGuess() {
