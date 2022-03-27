@@ -17,7 +17,7 @@ export const useUpdate = () => {
 
 export function Game(props: GameProps) {
   const createGame = props.hardMode ? createExtreamWordleGame : createWordleGame;
-  const game = useMemo(() => createGame(props.word), [props.word]);
+  const game = useMemo(() => createGame(props.word, 3), [props.word]);
   const update = useUpdate();
   const router = useRouter();
 
@@ -40,7 +40,7 @@ export function Game(props: GameProps) {
   function onShareClick() {
     if (window.navigator?.share) {
       window.navigator.share({
-        title: "ווערטער",
+        title: "יום הולדת 40 ליפית 🥳",
         url: window.location.toString(),
       });
     } else {
@@ -54,18 +54,12 @@ export function Game(props: GameProps) {
     return null;
   }
 
-  const cheatsOn = router.query.cheats === "on";
 
   return (
     <Container>
-      <TopBar
-        newGame={() => (window.location.href = "/create")}
-        onMuteClick={onMuteClick}
-        overrideHeader={cheatsOn ? game.word : undefined}
-        muted={!game.speechSynthesisEnabled}
-      />
+      <TopBar image={router.query.image as string} />
       <Main
-        numberOfRows={6}
+        numberOfRows={3}
         words={game.guesses}
         word={game.word}
         isGameOver={game.isGameOver}

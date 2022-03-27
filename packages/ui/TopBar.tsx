@@ -5,54 +5,33 @@ import { GoMute, GoUnmute, GoPlus } from "react-icons/go";
 const Container = styled.div`
   margin: auto;
   display: flex;
-  justify-content: space-evenly;
-  width: clamp(5vw, 100vw, 320px);
-  height: 60px;
+  justify-content: center;
+  width: clamp(5vw, 100vw, 90%);
+  height: 100%;
   font-family: "Secular One";
   overflow: hidden;
   font-size: clamp(0.5vw, 5vw, 15px);
   div {
-    text-align: center;
-    align-self: center;
-    /* justify-self: center; */
-  }
-  button {
-    border: none;
-    background-color: transparent;
-    color: rgb(194, 170, 82);
-  }
-  > :first-of-type > button {
-    color: rgb(98, 159, 91);
+    border-radius: 10px;
+    margin: 5px;
   }
   img {
-    width: clamp(0.5vw, 13vw, 40px);
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    border: solid rgb(212, 212, 212) 3px;
   }
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: _dark) {
     color: white;
   }
 `;
 
-export const TopBar = ({ newGame, muted, onMuteClick, overrideHeader }: TopBarProps) => {
+export const TopBar = ({ image }: TopBarProps) => {
   return (
     <Container>
       <div>
-        <button onClick={newGame}>
-          <GoPlus style={{ width: 40, height: 40 }} />
-        </button>
+        <img src={image} />
       </div>
-      <div>
-        <h1>{overrideHeader ?? "ווערטער"}</h1>
-      </div>
-      <div>
-        <button onClick={onMuteClick}>
-          {muted ? (
-            <GoMute style={{ width: 40, height: 40 }} />
-          ) : (
-            <GoUnmute style={{ width: 40, height: 40 }} />
-          )}
-        </button>
-      </div>
-      <div>&nbsp; </div>
     </Container>
   );
 };
@@ -68,8 +47,9 @@ export const MiniTopBar = () => {
 };
 
 interface TopBarProps {
-  newGame: () => void;
-  muted: boolean;
-  onMuteClick: () => void;
-  overrideHeader: string;
+  // newGame: () => void;
+  // muted: boolean;
+  // onMuteClick: () => void;
+  // overrideHeader: string;
+  image: string;
 }

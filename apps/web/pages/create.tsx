@@ -39,7 +39,7 @@ export default function CreateGame() {
   return (
     <Container>
       <Head>
-        <title>ווערטער</title>
+        <title>יום הולדת 40 ליפית 🥳</title>
       </Head>
       <MiniTopBar />
       <Main

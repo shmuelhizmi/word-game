@@ -42,7 +42,7 @@ export function textToSpeach(text: string) {
   window.speechSynthesis.speak(utterance);
 }
 
-export function createWordleGame(word?: string) {
+export function createWordleGame(word?: string, guessLength = 6) {
   // select word for every day
   const currentWord = word || words[Math.floor(day % words.length)];
   const wordLength = currentWord.length;
@@ -153,7 +153,7 @@ export function createWordleGame(word?: string) {
             }
           }
         });
-        if (guesses.length < 6 && !self.isWinning) {
+        if (guesses.length < guessLength && !self.isWinning) {
           guesses.push([]);
         }
         write(guesses);
@@ -196,7 +196,7 @@ export function createWordleGame(word?: string) {
     },
     get isGameOver() {
       return (
-        (guesses.length === 6 &&
+        (guesses.length === guessLength &&
           guesses[guesses.length - 1].length === wordLength &&
           !guesses[guesses.length - 1].find(
             (letter) => letter.isWinning === "undetermined"

@@ -7,11 +7,7 @@ export const Container = styled.div`
   left: 0;
   right: 0;
   display: grid;
-  grid-template-rows: 130px 1fr 1fr;
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: _dark) {
     background-color: rgb(34, 34, 34);
-  }
-  @media (max-height: 740px) {
-    grid-template-rows: 70px 1fr 1fr;
   }
 `;

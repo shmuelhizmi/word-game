@@ -7,6 +7,10 @@ import { useEffect, useState } from "react";
 const Container = styled.div`
   font-family: "Secular One";
   font-size: clamp(1vw, 10vw, 2em);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Row = styled.div`
@@ -26,7 +30,7 @@ const Tile = styled.div`
   border-width: 3px;
   border-radius: 5px;
   vertical-align: top;
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: _dark) {
     color: white;
   }
 `;
@@ -63,7 +67,7 @@ const PartialWinningTile = styled(Tile)`
 
 const UndeterminedTile = styled(Tile)`
   border-color: rgb(34, 34, 34);
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: _dark) {
     border-color: white;
   }
 `;

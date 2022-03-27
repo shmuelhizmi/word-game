@@ -5,7 +5,7 @@ export default function Index() {
   return (
     <>
       <Head>
-        <title>ווערטער</title>
+        <title>יום הולדת 40 ליפית 🥳</title>
       </Head>
       <Game />
     </>

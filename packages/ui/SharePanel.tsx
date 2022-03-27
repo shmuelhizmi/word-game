@@ -47,8 +47,9 @@ export function SharePanel(props: SharePanelProps) {
     }
   }
   return (
-    <Container>
-      <Button onClick={Share}>שתף תוצאה</Button>
-    </Container>
+    // <Container>
+    //   יום הולדת 40 יפית 🥳
+    // </Container>
+    <></>
   );
 }

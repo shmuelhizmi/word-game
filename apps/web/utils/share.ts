@@ -9,7 +9,7 @@ const winningMap: Record<Letter["isWinning"], string> = {
 };
 
 export function exportToText(words: Word[]) {
-  const header = `ווערטער בע"מ`;
+  const header = `יום הולדת 40 ליפית 🥳 בע"מ`;
   const subHeader = `נסיון ${words.length} מתוך 6`;
   const body = words
     .map((word) => word.map(({ isWinning }) => winningMap[isWinning]).join(""))
